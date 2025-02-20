@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <string>
 
 int main()
 {
+
+	sf::Time FPSCount;
 
 	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Adventure Game!");
 
@@ -44,7 +47,7 @@ int main()
 		Rectangle.setSize(sf::Vector2f(40, 40));
 
 		sf::Text NewText(font);
-		NewText.setString("Hello, World!");
+		NewText.setString(std::to_string(FPSCount.asMicroseconds() * 60 / 1));
 		NewText.setCharacterSize(16);
 
 		GraphicsWindow.clear();

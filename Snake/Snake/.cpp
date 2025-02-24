@@ -1,0 +1,6 @@
+#include "Segment"
+
+Segment::Segment()
+{
+
+}

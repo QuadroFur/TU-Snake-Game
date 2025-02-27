@@ -1,31 +1,42 @@
 #include "Snake.h"
-#include "Segment.h"
+#include <iostream>
+#include <SFML/Graphics.hpp>
 
-void Snake::AddSegment()
+void Snake::MoveSnake()
 {
+	switch (S_Direction)
+	{
+	case Snake::Up:
+		S_Position.y = S_Position.y - S_SegSize;
+		break;
+	case Snake::Left:
+		S_Position.x = S_Position.x - S_SegSize;
+		break;
+	case Snake::Down:
+		S_Position.y = S_Position.y + S_SegSize;
+		break;
+	case Snake::Right:
+		S_Position.x = S_Position.x + S_SegSize;
+		break;
+	default:
+		std::cerr << "No movement set!";
+	}
 
-	Segment NewSegment;
-	NewSegment.PosX = Segments.begin()
-
-	Segments.resize(Segments.size() + 1);
-	Segments.push_back(NewSegment);
-	Length++;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+	{
+		S_Direction = Up;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+	{
+		S_Direction = Down;
+	}
 
 }
 
-void Snake::MoveSnake(int Dir)
+void Snake::DrawSnake(sf::RenderWindow& Window)
 {
-
-	switch (Dir)
-	{
-
-	case 1:
-		
-		PosY = PosY--;
-
-		for (int i = 1; Segments.size(); i++)
-		{
-
-		}
-	}
+	sf::CircleShape Body(S_SegSize / 2);
+	Body.setPosition(S_Position);
+	Body.setFillColor(sf::Color::Red);
+	Window.draw(Body);
 }

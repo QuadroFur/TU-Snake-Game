@@ -1,18 +1,20 @@
 #pragma once
 #include <list>
 #include "segment.h"
+#include <SFML/Graphics.hpp>
 
 class Snake
 {
 public:
 
-	int Length = 1;
-	int PosX = 10;
-	int PosY = 10;
+	const int S_SegSize = 20.0f;
 
-	std::list<Segment> Segments;
+	enum S_Directions {Up, Left, Down, Right};
+	
+	S_Directions S_Direction = Right;
+	sf::Vector2f S_Position = { 100.0f, 100.0f };
 
-	void AddSegment();
-	void MoveSnake(int Dir); //Direction given clockwise, 1-4.
+	void MoveSnake(); //Direction given clockwise, 1-4.
+	void DrawSnake(sf::RenderWindow& Window);
 	
 };

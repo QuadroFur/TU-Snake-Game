@@ -14,7 +14,6 @@ public:
 	S_Directions S_Direction = Right;
 	sf::Vector2f S_Position = { 100.0f, 100.0f };
 
-	void MoveSnake(); //Direction given clockwise, 1-4.
+	void MoveSnake(sf::Keyboard::Key* Keybinds); //Direction given clockwise, 1-4.
 	void DrawSnake(sf::RenderWindow& Window);
-	
 };

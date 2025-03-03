@@ -6,7 +6,7 @@ int main()
 {
 
 	Game NewGame;
-	NewGame.Run();
+	NewGame.Run(); //Make, and run a new game. Menu code will likely go here in the future.
 
 	return 0;
 };

@@ -6,6 +6,8 @@ class Game
 {
 public:
 
+	const int SimSpeed = 0.83f;
+
 	void Run();
 
 	sf::Keyboard::Key Keybinds[5] =

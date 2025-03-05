@@ -7,13 +7,15 @@ class Snake
 {
 public:
 
-	const int S_SegSize = 20.0f;
+	const int S_SegSize = 20;
 
 	enum S_Directions {Up, Left, Down, Right};
+	std::list<sf::Vector2f> Segments;
 	
 	S_Directions S_Direction = Right;
-	sf::Vector2f S_Position = { 100.0f, 100.0f };
 
 	void MoveSnake(sf::Keyboard::Key* Keybinds); //Direction given clockwise, 1-4.
 	void DrawSnake(sf::RenderWindow& Window);
+
+	Snake();
 };

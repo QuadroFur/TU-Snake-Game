@@ -1,12 +1,14 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
+#include "Collectable.h"
 
 class Game
 {
 public:
 
-	const int SimSpeed = 0.83f;
+	const float SimSpeed = 0.13f;
+	const int CellSize = 20;
 
 	void Run();
 
@@ -18,4 +20,9 @@ public:
 		sf::Keyboard::Key::D,		//Right
 		sf::Keyboard::Key::Space	//Shed Skin
 	};
+
+private:
+
+	Collectable Collectables[3];
+
 };

@@ -1,10 +1,14 @@
 #include "Game.h"
 #include "Snake.h"
+#include "Collectable.h"
 
 void Game::Run()
 {
 	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Snake Game!"); //Creating the snake game window.
 	Snake NewSnake;
+
+	Collectable NewCollectable;
+	NewCollectable.Position = sf::Vector2f(200, 200);
 
 	sf::Clock UpdateClock;
 
@@ -23,9 +27,11 @@ void Game::Run()
 		if (UpdateClock.getElapsedTime().asSeconds() > SimSpeed) //
 		{
 			NewSnake.MoveSnake(Keybinds); //Calling the move function in Snake.CPP
+			UpdateClock.restart();
 		}
 		GraphicsWindow.clear(); //Clearing the graphics window before rendering more.
 		NewSnake.DrawSnake(GraphicsWindow); //Calling the draw function in Snake.CPP
+		NewCollectable.SpawnCollectable(GraphicsWindow);
 		GraphicsWindow.display(); //Display output. Though this is self explanatory.
 	}
 	return;

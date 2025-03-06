@@ -1,6 +1,7 @@
 #include "Snake.h"
 #include <iostream>
 
+
 Snake::Snake()
 {
 	Segments.push_back(sf::Vector2f(100, 100));
@@ -9,29 +10,29 @@ Snake::Snake()
 	Segments.push_back(sf::Vector2f(140, 100));
 }
 
-void Snake::MoveSnake(sf::Keyboard::Key* Keybinds)
+void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 {
+
 	switch (S_Direction) //Moving the snake in the direction
 	{
 	case Snake::Up:
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y - S_SegSize));
-		Segments.pop_back();
 		break;
 	case Snake::Left:
 		Segments.push_front(sf::Vector2f(Segments.front().x - S_SegSize, Segments.front().y));
-		Segments.pop_back();
 		break;
 	case Snake::Down:
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y + S_SegSize));
-		Segments.pop_back();
 		break;
 	case Snake::Right:
 		Segments.push_front(sf::Vector2f(Segments.front().x + S_SegSize, Segments.front().y));
-		Segments.pop_back();
 		break;
 	default:
 		std::cerr << "No movement set!";
 	}
+	Segments.pop_back();
+
+	std::cout << Segments.front().x << ", " << Segments.front().y << std::endl;
 
 	if (sf::Keyboard::isKeyPressed(Keybinds[0]) && S_Direction != Down) //Changing direction based on key press.
 		S_Direction = Up;
@@ -45,9 +46,10 @@ void Snake::MoveSnake(sf::Keyboard::Key* Keybinds)
 
 void Snake::DrawSnake(sf::RenderWindow& Window) //drawing the snake
 {
+	sf::CircleShape Body(S_SegSize / 2);
+
 	for (sf::Vector2f i : Segments)
-	{
-		sf::CircleShape Body(S_SegSize / 2);
+	{		
 		Body.setPosition(i);
 		Body.setFillColor(sf::Color::Red);
 		Window.draw(Body);

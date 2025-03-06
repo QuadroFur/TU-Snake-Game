@@ -24,7 +24,7 @@ void Game::Run()
 				GraphicsWindow.close();
 		}
 
-		if (UpdateClock.getElapsedTime().asSeconds() > SimSpeed) //
+		if (UpdateClock.getElapsedTime().asSeconds() > SimSpeed)
 		{
 			NewSnake.MoveSnake(Keybinds); //Calling the move function in Snake.CPP
 			UpdateClock.restart();

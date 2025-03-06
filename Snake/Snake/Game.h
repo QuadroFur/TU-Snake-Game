@@ -7,22 +7,19 @@ class Game
 {
 public:
 
-	const float SimSpeed = 0.13f;
-	const int CellSize = 20;
-
 	void Run();
 
-	sf::Keyboard::Key Keybinds[5] =
+	std::vector <sf::Keyboard::Key> Keybinds =
 	{
 		sf::Keyboard::Key::W,		//Up
 		sf::Keyboard::Key::S,		//Down
 		sf::Keyboard::Key::A,		//Left
-		sf::Keyboard::Key::D,		//Right
-		sf::Keyboard::Key::Space	//Shed Skin
+		sf::Keyboard::Key::D		//Right
 	};
 
 private:
 
 	Collectable Collectables[3];
+	const float SimSpeed = 0.13f;
 
 };

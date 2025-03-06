@@ -4,6 +4,9 @@
 Snake::Snake()
 {
 	Segments.push_back(sf::Vector2f(100, 100));
+	Segments.push_back(sf::Vector2f(120, 100));
+	Segments.push_back(sf::Vector2f(130, 100));
+	Segments.push_back(sf::Vector2f(140, 100));
 }
 
 void Snake::MoveSnake(sf::Keyboard::Key* Keybinds)

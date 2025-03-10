@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "Collectable.h"
+#include <vector>
 
 class Game
 {
@@ -19,7 +20,7 @@ public:
 
 private:
 
-	Collectable Collectables[3];
+	std::vector<Collectable> Collectables;
 	const float SimSpeed = 0.13f;
 
 };

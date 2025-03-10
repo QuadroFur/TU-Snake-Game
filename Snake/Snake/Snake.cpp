@@ -15,15 +15,43 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 	switch (S_Direction) //Moving the snake in the direction
 	{
 	case Snake::Up:
+		for (sf::Vector2f i : Segments) //Move to a function?
+		{
+			if (i != Segments.front() && i.x == Segments.front().x && i.y - S_SegSize == Segments.front().y)
+			{
+				//Kill the snake.
+			}
+		}
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y - S_SegSize));
 		break;
 	case Snake::Left:
+		for (sf::Vector2f i : Segments) //Move to a function?
+		{
+			if (i != Segments.front() && i.x - S_SegSize == Segments.front().x && i.y == Segments.front().y)
+			{
+				//Kill the snake.
+			}
+		}
 		Segments.push_front(sf::Vector2f(Segments.front().x - S_SegSize, Segments.front().y));
 		break;
 	case Snake::Down:
+		for (sf::Vector2f i : Segments) //Move to a function?
+		{
+			if (i != Segments.front() && i.x == Segments.front().x && i.y + S_SegSize == Segments.front().y)
+			{
+				//Kill the snake.
+			}
+		}
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y + S_SegSize));
 		break;
 	case Snake::Right:
+		for (sf::Vector2f i : Segments) //Move to a function?
+		{
+			if (i != Segments.front() && i.x + S_SegSize == Segments.front().x && i.y == Segments.front().y)
+			{
+				//Kill the snake.
+			}
+		}
 		Segments.push_front(sf::Vector2f(Segments.front().x + S_SegSize, Segments.front().y));
 		break;
 	default:

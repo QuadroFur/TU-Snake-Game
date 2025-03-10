@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Snake.h"
 #include "Collectable.h"
+#include <iostream>
 
 void Game::Run()
 {
@@ -24,11 +25,30 @@ void Game::Run()
 		if (UpdateClock.getElapsedTime().asSeconds() > SimSpeed)
 		{
 			NewSnake.MoveSnake(Keybinds); //Calling the move function in Snake.CPP
-			for (Collectable i : Collectables)
+			/*for (Collectable i : Collectables)
 			{
 				if (i.Position == NewSnake.Segments.front())
 				{
 					NewSnake.Segments.push_back(sf::Vector2f(NewSnake.Segments.back().x + 20, NewSnake.Segments.back().y));
+					Collectables
+				}
+			}*/
+			for (int i = 0; i < Collectables.size(); i++)
+			{
+				if (Collectables[i].Position == NewSnake.Segments.front())
+				{
+					NewSnake.Segments.push_back(sf::Vector2f(NewSnake.Segments.back().x + 20, NewSnake.Segments.back().y));
+					Collectables.erase(Collectables.begin() + i);
+				}
+			}
+			for (sf::Vector2f i : NewSnake.Segments)
+			{
+				if (i != NewSnake.Segments.front())
+				{
+					if (NewSnake.Segments.front().x == i.x && NewSnake.Segments.front().y == i.y)
+						return;
+					else
+						std::cout << "FALSE " << i.x << i.y << std::endl;
 				}
 			}
 			UpdateClock.restart();

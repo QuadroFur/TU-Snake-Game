@@ -21,6 +21,8 @@ public:
 private:
 
 	std::vector<Collectable> Collectables;
-	const float SimSpeed = 0.13f;
+	const float SimSpeed = 0.1f; //0.13f
+	
+	int SeaLevel = 1;
 
 };

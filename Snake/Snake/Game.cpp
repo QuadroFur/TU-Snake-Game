@@ -24,7 +24,12 @@ void Game::Run()
 
 		if (UpdateClock.getElapsedTime().asSeconds() > SimSpeed)
 		{
+
+			//Drop the water
+			//90 * SimSpeed for a constant water drop speed - how many passes before the water drops again?
+
 			NewSnake.MoveSnake(Keybinds); //Calling the move function in Snake.CPP
+
 			/*for (Collectable i : Collectables)
 			{
 				if (i.Position == NewSnake.Segments.front())
@@ -47,8 +52,6 @@ void Game::Run()
 				{
 					if (NewSnake.Segments.front().x == i.x && NewSnake.Segments.front().y == i.y)
 						return;
-					else
-						std::cout << "FALSE " << i.x << i.y << std::endl;
 				}
 			}
 			UpdateClock.restart();

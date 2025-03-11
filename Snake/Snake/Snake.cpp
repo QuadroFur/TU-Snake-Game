@@ -5,9 +5,6 @@
 Snake::Snake()
 {
 	Segments.push_back(sf::Vector2f(100, 100));
-	Segments.push_back(sf::Vector2f(120, 100));
-	Segments.push_back(sf::Vector2f(130, 100));
-	Segments.push_back(sf::Vector2f(140, 100));
 }
 
 void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
@@ -17,9 +14,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 	case Snake::Up:
 		for (sf::Vector2f i : Segments) //Move to a function?
 		{
-			if (i != Segments.front() && i.x == Segments.front().x && i.y - S_SegSize == Segments.front().y)
+			if (i != Segments.front() && Segments.front().x == i.x && Segments.front().y - S_SegSize == i.y)
 			{
-				//Kill the snake.
+				
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y - S_SegSize));
@@ -27,9 +24,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 	case Snake::Left:
 		for (sf::Vector2f i : Segments) //Move to a function?
 		{
-			if (i != Segments.front() && i.x - S_SegSize == Segments.front().x && i.y == Segments.front().y)
+			if (i != Segments.front() && Segments.front().x - S_SegSize == i.x && Segments.front().y == i.y)
 			{
-				//Kill the snake.
+				
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x - S_SegSize, Segments.front().y));
@@ -37,9 +34,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 	case Snake::Down:
 		for (sf::Vector2f i : Segments) //Move to a function?
 		{
-			if (i != Segments.front() && i.x == Segments.front().x && i.y + S_SegSize == Segments.front().y)
+			if (i != Segments.front() && Segments.front().x == i.x && Segments.front().y + S_SegSize == i.y)
 			{
-				//Kill the snake.
+				
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y + S_SegSize));
@@ -47,9 +44,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 	case Snake::Right:
 		for (sf::Vector2f i : Segments) //Move to a function?
 		{
-			if (i != Segments.front() && i.x + S_SegSize == Segments.front().x && i.y == Segments.front().y)
+			if (i != Segments.front() && Segments.front().x + S_SegSize == i.x && Segments.front().y == i.y)
 			{
-				//Kill the snake.
+
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x + S_SegSize, Segments.front().y));

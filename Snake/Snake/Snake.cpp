@@ -5,6 +5,7 @@
 Snake::Snake()
 {
 	Segments.push_back(sf::Vector2f(100, 100));
+	S_State = Alive;
 }
 
 void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
@@ -16,7 +17,7 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		{
 			if (i != Segments.front() && Segments.front().x == i.x && Segments.front().y - S_SegSize == i.y)
 			{
-				
+				S_State = Dead;
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y - S_SegSize));
@@ -26,7 +27,7 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		{
 			if (i != Segments.front() && Segments.front().x - S_SegSize == i.x && Segments.front().y == i.y)
 			{
-				
+				S_State = Dead;
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x - S_SegSize, Segments.front().y));
@@ -36,7 +37,7 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		{
 			if (i != Segments.front() && Segments.front().x == i.x && Segments.front().y + S_SegSize == i.y)
 			{
-				
+				S_State = Dead;
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x, Segments.front().y + S_SegSize));
@@ -46,7 +47,7 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		{
 			if (i != Segments.front() && Segments.front().x + S_SegSize == i.x && Segments.front().y == i.y)
 			{
-
+				S_State = Dead;
 			}
 		}
 		Segments.push_front(sf::Vector2f(Segments.front().x + S_SegSize, Segments.front().y));

@@ -30,10 +30,11 @@ void Game::Run()
 				//90 * SimSpeed for a constant water drop speed - how many passes before the water drops again?
 
 				G_Pass++;
-				if (G_Pass == 90 * G_SimSpeed && G_SeaLevel > 0)
+				if (G_Pass >= 1 / G_SimSpeed && G_SeaLevel > 0)
 				{
 					G_SeaLevel -= 20;
-					std::cout << "Sea level dropping..." << std::endl;
+					G_Pass = 0;
+					std::cout << "Sea level dropping..." << G_SeaLevel << std::endl;
 				}
 				else if (G_SeaLevel <= 0)
 				{
@@ -55,8 +56,9 @@ void Game::Run()
 				{
 					if (Collectables[i].Position == NewSnake.Segments.front())
 					{
-						NewSnake.Segments.push_back(sf::Vector2f(NewSnake.Segments.back().x + 20, NewSnake.Segments.back().y));
+						NewSnake.Segments.push_back(sf::Vector2f(-20, -20));
 						Collectables.erase(Collectables.begin() + i);
+						//std::cout << Collectables.size() << std::endl;
 					}
 				}
 				for (sf::Vector2f i : NewSnake.Segments)

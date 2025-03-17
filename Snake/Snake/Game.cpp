@@ -8,6 +8,8 @@ void Game::Run()
 	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Snake Game!"); //Creating the snake game window.
 	Snake NewSnake;
 
+	sf::RectangleShape Water;
+
 	sf::Clock UpdateClock;
 
 	srand(time(NULL));
@@ -26,14 +28,19 @@ void Game::Run()
 		{
 			if (NewSnake.S_State == NewSnake.Alive)
 			{
-				//Drop the water
-				//90 * SimSpeed for a constant water drop speed - how many passes before the water drops again?
+				//
+				// Code below for water dropping.
+				// Advised to replace the below code with a seperate timer, which will likely occur. Wanted to learn the maths for this however, so stuck with figuring it out anyways.
+				//
 
-				G_Pass++;
-				if (G_Pass >= 1 / G_SimSpeed * 90  && G_SeaLevel > 0)
+				G_Pass++; //A counter for the number of times the loop has passed.
+				int TotalSteps = 800 / 20; //Divide the screen height by the cell size to get the number of times the water has to drop.
+				float TimeOfStep = 90.0f / TotalSteps; //Divide the time the water has to drop (fixed at 90) by the number of steps that needs to be made
+				float NumPasses = TimeOfStep / G_SimSpeed; //Divide the time between each step by the speed of the clock. This will not be 100% accurate.
+				if (G_Pass >= NumPasses)
 				{
 					G_SeaLevel -= 20;
-					G_Pass = 0;
+					G_Pass -= NumPasses; //This is to prevent the above inaccuracy causing error. To avoid innacuracy, SimSpeed must always be exactly divisible by TimeOfStep.
 					std::cout << "Sea level dropping..." << G_SeaLevel << std::endl;
 				}
 				else if (G_SeaLevel <= 0)
@@ -91,6 +98,11 @@ void Game::Run()
 			i.SpawnCollectable(GraphicsWindow);
 
 		NewSnake.DrawSnake(GraphicsWindow); //Calling the draw function in Snake.CPP
+
+		//Draw the water
+
+		
+
 		GraphicsWindow.display(); //Display output. Though this is self explanatory.
 	}
 	return;

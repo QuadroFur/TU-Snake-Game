@@ -6,11 +6,10 @@
 void Game::Run()
 {
 	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Snake Game!"); //Creating the snake game window.
-	Snake NewSnake;
-
 	sf::RectangleShape Water;
-
 	sf::Clock UpdateClock;
+
+	Snake NewSnake;
 
 	srand(time(NULL));
 
@@ -81,7 +80,10 @@ void Game::Run()
 				if (rand() % 6 == 2 && Collectables.size() < 5)
 				{
 					Collectable NewCollectable;
-					NewCollectable.Position = sf::Vector2f(rand() % (800 / 20) * 20, rand() % (800 / 20) * 20);
+					NewCollectable.Position = sf::Vector2f(-1, -1);
+					do { NewCollectable.Position = FindFreePosition(); } while (NewCollectable.Position != sf::Vector2f(-1, -1));
+
+					//NewCollectable.Position = sf::Vector2f(rand() % (760 / 20) * 20 + 20, rand() % (760 / 20) * 20 + 20);
 					Collectables.push_back(NewCollectable);
 				}
 			}
@@ -101,9 +103,22 @@ void Game::Run()
 
 		//Draw the water
 
-		
-
 		GraphicsWindow.display(); //Display output. Though this is self explanatory.
 	}
 	return;
+}
+sf::Vector2f Game::FindFreePosition()
+{
+	sf::Vector2f Pos;
+	Pos.x = rand() % (760 / 20) * 20 + 20;
+	Pos.y = rand() % (760 / 20) * 20 + 20;
+
+	for (int i = 0; i < Collectables.size(); i++)
+	{
+		if (Collectables[i].Position == Pos)
+		{
+			return sf::Vector2f(-1, -1);
+		}
+	}
+	return Pos;
 }

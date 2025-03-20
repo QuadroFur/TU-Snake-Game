@@ -20,6 +20,8 @@ public:
 
 private:
 
+	sf::Vector2f FindFreePosition();
+
 	std::vector<Collectable> Collectables;
 	const float G_SimSpeed = 0.1f; //0.13f
 	

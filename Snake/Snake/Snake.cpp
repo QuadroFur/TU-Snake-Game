@@ -60,11 +60,11 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 	//Move this outside of the move function, so the direction can be changed during the render delay.
 	if (sf::Keyboard::isKeyPressed(Keybinds[0]) && S_Direction != Down) //Changing direction based on key press.
 		S_Direction = Up;
-	else if (sf::Keyboard::isKeyPressed(Keybinds[1]) && S_Direction != Up)
+	if (sf::Keyboard::isKeyPressed(Keybinds[1]) && S_Direction != Up)
 		S_Direction = Down;
-	else if (sf::Keyboard::isKeyPressed(Keybinds[2]) && S_Direction != Right)
+	if (sf::Keyboard::isKeyPressed(Keybinds[2]) && S_Direction != Right)
 		S_Direction = Left;
-	else if (sf::Keyboard::isKeyPressed(Keybinds[3]) && S_Direction != Left)
+	if (sf::Keyboard::isKeyPressed(Keybinds[3]) && S_Direction != Left)
 		S_Direction = Right;
 }
 

@@ -31,10 +31,10 @@ public:
 
 	LinkedList() { front = nullptr; }
 
-	LinkedList(T Obj) {
+	LinkedList(T Obj[]) {
 		for (int i = sizeof(Obj); i >= 0; i--)
 		{
-			front = ListNode<T> NewNode(Obj, front);
+			front = new ListNode<T>(Obj[i], front);
 		}
 	}
 };

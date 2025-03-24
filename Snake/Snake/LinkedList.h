@@ -15,7 +15,7 @@ public:
 		Data = Obj;
 		Next = nullptr;
 	}
-	ListNode(T Obj, ListNode* NextNode) {
+	ListNode(T Obj, ListNode<T>* NextNode) {
 		Data = Obj;
 		Next = NextNode;
 	}
@@ -36,5 +36,9 @@ public:
 		{
 			front = new ListNode<T>(Obj[i], front);
 		}
-	}
+	};
+
+	void PushBack(T Obj);
+	void PushFront(T Obj);
+
 };

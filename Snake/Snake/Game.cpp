@@ -62,16 +62,16 @@ void Game::Run()
 				{
 					if (Collectables[i].Position == NewSnake.Segments.front())
 					{
-						NewSnake.Segments.push_back(sf::Vector2f(-20, -20));
+						NewSnake.Segments.PushBack(sf::Vector2f(-20, -20));
 						Collectables.erase(Collectables.begin() + i);
-						std::cout << NewSnake.Segments.size() << std::endl;
+						std::cout << NewSnake.Segments.Size() << std::endl;
 					}
 				}
-				for (sf::Vector2f i : NewSnake.Segments)
+				for (int i = 0; i < NewSnake.Segments.Size(); i++)
 				{
-					if (i != NewSnake.Segments.front())
+					if (NewSnake.Segments.GetAt(i) != NewSnake.Segments.front())
 					{
-						if (NewSnake.Segments.front().x == i.x && NewSnake.Segments.front().y == i.y)
+						if (NewSnake.Segments.front().x == NewSnake.Segments.GetAt(i).x && NewSnake.Segments.front().y == NewSnake.Segments.GetAt(i).y)
 							return;
 					}
 				}

@@ -2,6 +2,7 @@
 #include <list>
 #include "segment.h"
 #include <SFML/Graphics.hpp>
+#include "LinkedList.h"
 
 class Snake
 {
@@ -11,7 +12,7 @@ public:
 
 	enum S_Directions {Up, Left, Down, Right};
 	enum S_States { Alive, Dead };
-	std::list<sf::Vector2f> Segments;
+	LinkedList<sf::Vector2f>Segments;
 	
 	S_States S_State = Alive;
 	S_Directions S_Direction = Right;

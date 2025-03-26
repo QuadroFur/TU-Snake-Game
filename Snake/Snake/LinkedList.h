@@ -8,12 +8,12 @@ public:
 	ListNode* Next;
 
 	ListNode() {
-		Data = nullptr;
-		Next = nullptr;
+		Data;
+		Next;
 	}
 	ListNode(T Obj) {
 		Data = Obj;
-		Next = nullptr;
+		Next;
 	}
 	ListNode(T Obj, ListNode<T>* NextNode) {
 		Data = Obj;
@@ -24,21 +24,26 @@ public:
 template <typename T>
 class LinkedList
 {
+private:
+
+	ListNode<T> Head;
 
 public:
 
-	ListNode<T> front;
-
-	LinkedList() { front = nullptr; }
+	LinkedList() { Head; };
 
 	LinkedList(T Obj[]) {
 		for (int i = sizeof(Obj); i >= 0; i--)
 		{
-			front = new ListNode<T>(Obj[i], front);
+			Head = new ListNode<T>(Obj[i], Head);
 		}
 	};
 
+	T front() { return Head.Data; };
 	void PushBack(T Obj);
 	void PushFront(T Obj);
+	void PopBack();
+	T GetAt(int Pos);
+	int Size();
 
 };

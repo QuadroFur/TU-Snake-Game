@@ -81,7 +81,7 @@ void Game::Run()
 				{
 					Collectable NewCollectable;
 					NewCollectable.Position = sf::Vector2f(-1, -1);
-					do { NewCollectable.Position = FindFreePosition(); } while (NewCollectable.Position != sf::Vector2f(-1, -1));
+					do { NewCollectable.Position = FindFreePosition(); } while (NewCollectable.Position == sf::Vector2f(-1, -1));
 
 					//NewCollectable.Position = sf::Vector2f(rand() % (760 / 20) * 20 + 20, rand() % (760 / 20) * 20 + 20);
 					Collectables.push_back(NewCollectable);

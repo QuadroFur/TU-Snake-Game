@@ -70,7 +70,7 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 
 void Snake::DrawSnake(sf::RenderWindow& Window) //drawing the snake
 {
-	sf::CircleShape Body(S_SegSize / 2);
+	sf::RectangleShape Body(sf::Vector2f(S_SegSize, S_SegSize));
 
 	for (int i = 0; i < Segments.Size(); i++)
 	{		

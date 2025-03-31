@@ -8,6 +8,7 @@ class Snake
 {
 public:
 
+	int Breath = 100;
 	const int S_SegSize = 20;
 
 	enum S_Directions {Up, Left, Down, Right};

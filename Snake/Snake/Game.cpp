@@ -11,6 +11,10 @@ void Game::Run()
 
 	Snake NewSnake;
 
+	Water.setFillColor(sf::Color(0, 165, 255, 80));
+	Water.setPosition(sf::Vector2f(0, 0));
+	Water.setSize(sf::Vector2f(800, 800));
+
 	srand(time(NULL));
 
 	while (GraphicsWindow.isOpen())
@@ -38,11 +42,12 @@ void Game::Run()
 				float NumPasses = TimeOfStep / G_SimSpeed; //Divide the time between each step by the speed of the clock. This will not be 100% accurate.
 				if (G_Pass >= NumPasses)
 				{
-					G_SeaLevel -= 20;
+					G_SeaLevel += 20;
 					G_Pass -= NumPasses; //This is to prevent the above inaccuracy causing error. To avoid innacuracy, SimSpeed must always be exactly divisible by TimeOfStep.
 					std::cout << "Sea level dropping..." << G_SeaLevel << std::endl;
+					Water.setPosition(sf::Vector2f(0, G_SeaLevel));
 				}
-				else if (G_SeaLevel <= 0)
+				else if (G_SeaLevel >= 800)
 				{
 					std::cout << "The drained sea..." << std::endl;
 					return;
@@ -50,14 +55,10 @@ void Game::Run()
 
 				NewSnake.MoveSnake(Keybinds); //Calling the move function in Snake.CPP
 
-				/*for (Collectable i : Collectables)
-				{
-					if (i.Position == NewSnake.Segments.front())
-					{
-						NewSnake.Segments.push_back(sf::Vector2f(NewSnake.Segments.back().x + 20, NewSnake.Segments.back().y));
-						Collectables
-					}
-				}*/
+				if (NewSnake.Segments.front().y < G_SeaLevel && NewSnake.Breath <= 100) NewSnake.Breath += 1;
+				else NewSnake.Breath -= 1;
+				std::cout << "Breath: " << NewSnake.Breath << std::endl;
+
 				for (int i = 0; i < Collectables.size(); i++)
 				{
 					if (Collectables[i].Position == NewSnake.Segments.front())
@@ -100,6 +101,7 @@ void Game::Run()
 			i.SpawnCollectable(GraphicsWindow);
 
 		NewSnake.DrawSnake(GraphicsWindow); //Calling the draw function in Snake.CPP
+		GraphicsWindow.draw(Water);
 
 		//Draw the water
 
@@ -111,11 +113,14 @@ sf::Vector2f Game::FindFreePosition()
 {
 	sf::Vector2f Pos;
 	Pos.x = rand() % (760 / 20) * 20 + 20;
-	Pos.y = rand() % (760 / 20) * 20 + 20;
+	Pos.y = rand() % 20 * (G_SeaLevel + 20) - 20;
+
+	//Height * 40
+	//CellSize * Num of Cells = max
 
 	for (int i = 0; i < Collectables.size(); i++)
 	{
-		if (Collectables[i].Position == Pos)
+		if (Collectables[i].Position == Pos && Collectables[i].Position != sf::Vector2f(-1, -1))
 		{
 			return sf::Vector2f(-1, -1);
 		}

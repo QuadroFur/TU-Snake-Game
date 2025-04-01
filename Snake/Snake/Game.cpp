@@ -57,7 +57,8 @@ void Game::Run()
 
 				if (NewSnake.Segments.front().y < G_SeaLevel && NewSnake.Breath <= 100) NewSnake.Breath += 1;
 				else NewSnake.Breath -= 1;
-				std::cout << "Breath: " << NewSnake.Breath << std::endl;
+				if (NewSnake.Breath <= 0) NewSnake.S_State = NewSnake.Dead;
+				std::cout << "Breath: " + NewSnake.Breath * 2 << std::endl;
 
 				for (int i = 0; i < Collectables.size(); i++)
 				{

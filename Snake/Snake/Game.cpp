@@ -58,15 +58,16 @@ void Game::Run()
 				if (NewSnake.Segments.front().y < G_SeaLevel && NewSnake.Breath <= 100) NewSnake.Breath += 1;
 				else NewSnake.Breath -= 1;
 				if (NewSnake.Breath <= 0) NewSnake.S_State = NewSnake.Dead;
-				std::cout << "Breath: " + NewSnake.Breath * 2 << std::endl;
+				std::cout << "Breath: " << NewSnake.Breath << std::endl;
 
 				for (int i = 0; i < Collectables.size(); i++)
 				{
 					if (Collectables[i].Position == NewSnake.Segments.front())
 					{
 						NewSnake.Segments.PushBack(sf::Vector2f(-20, -20));
+						NewSnake.Breath += 10;
 						Collectables.erase(Collectables.begin() + i);
-						std::cout << NewSnake.Segments.Size() << std::endl;
+
 					}
 				}
 				for (int i = 0; i < NewSnake.Segments.Size(); i++)
@@ -114,7 +115,10 @@ sf::Vector2f Game::FindFreePosition()
 {
 	sf::Vector2f Pos;
 	Pos.x = rand() % (760 / 20) * 20 + 20;
-	Pos.y = rand() % 20 * (G_SeaLevel + 20) - 20;
+	Pos.y = rand() % ((780 - G_SeaLevel) + G_SeaLevel) / 20;
+
+	std::cout << Pos.y << std::endl;
+	std::cout << G_SeaLevel;
 
 	//Height * 40
 	//CellSize * Num of Cells = max

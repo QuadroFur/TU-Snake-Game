@@ -18,7 +18,7 @@ public:
 	S_States S_State = Alive;
 	S_Directions S_Direction = Right;
 
-	void MoveSnake(std::vector<sf::Keyboard::Key> Keybinds); //Direction given clockwise, 1-4.
+	void MoveSnake(int SeaLevel, Snake& OtherSnake);
 	void DrawSnake(sf::RenderWindow& Window);
 
 	Snake();

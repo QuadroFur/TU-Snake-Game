@@ -8,7 +8,7 @@ Snake::Snake()
 	S_State = Alive;
 }
 
-void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
+void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 {
 	switch (S_Direction) //Moving the snake in the direction
 	{
@@ -16,9 +16,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x == Segments.GetAt(i).x && Segments.front().y - S_SegSize == Segments.GetAt(i).y)
-			{
 				S_State = Dead;
-			}
+			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+				OtherSnake.S_State = Dead;
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x, Segments.front().y - S_SegSize));
 		break;
@@ -26,9 +26,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x - S_SegSize == Segments.GetAt(i).x && Segments.front().y == Segments.GetAt(i).y)
-			{
 				S_State = Dead;
-			}
+			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+				OtherSnake.S_State = Dead;
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x - S_SegSize, Segments.front().y));
 		break;
@@ -36,9 +36,9 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x == Segments.GetAt(i).x && Segments.front().y + S_SegSize == Segments.GetAt(i).y)
-			{
 				S_State = Dead;
-			}
+			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+				OtherSnake.S_State = Dead;
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x, Segments.front().y + S_SegSize));
 		break;
@@ -46,26 +46,18 @@ void Snake::MoveSnake(std::vector<sf::Keyboard::Key> Keybinds)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x + S_SegSize == Segments.GetAt(i).x && Segments.front().y == Segments.GetAt(i).y)
-			{
 				S_State = Dead;
-			}
+			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+				OtherSnake.S_State = Dead;
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x + S_SegSize, Segments.front().y));
 		break;
 	default:
 		std::cerr << "No movement set!";
 	}
+	if (Segments.front().y < SeaLevel - 20)
+		Segments.PopBack();
 	Segments.PopBack();
-
-	//Move this outside of the move function, so the direction can be changed during the render delay.
-	if (sf::Keyboard::isKeyPressed(Keybinds[0]) && S_Direction != Down) //Changing direction based on key press.
-		S_Direction = Up;
-	if (sf::Keyboard::isKeyPressed(Keybinds[1]) && S_Direction != Up)
-		S_Direction = Down;
-	if (sf::Keyboard::isKeyPressed(Keybinds[2]) && S_Direction != Right)
-		S_Direction = Left;
-	if (sf::Keyboard::isKeyPressed(Keybinds[3]) && S_Direction != Left)
-		S_Direction = Right;
 }
 
 void Snake::DrawSnake(sf::RenderWindow& Window) //drawing the snake
@@ -73,7 +65,7 @@ void Snake::DrawSnake(sf::RenderWindow& Window) //drawing the snake
 	sf::RectangleShape Body(sf::Vector2f(S_SegSize, S_SegSize));
 
 	for (int i = 0; i < Segments.Size(); i++)
-	{		
+	{
 		Body.setPosition(Segments.GetAt(i));
 		Body.setFillColor(sf::Color::Red);
 		Window.draw(Body);

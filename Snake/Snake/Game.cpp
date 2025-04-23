@@ -9,7 +9,8 @@ void Game::Run()
 	sf::RectangleShape Water;
 	sf::Clock UpdateClock;
 
-	Snake NewSnake;
+	Snake PlrSnake;
+	Snake AISnake;
 
 	Water.setFillColor(sf::Color(0, 165, 255, 80));
 	Water.setPosition(sf::Vector2f(0, 0));
@@ -29,7 +30,7 @@ void Game::Run()
 
 		if (UpdateClock.getElapsedTime().asSeconds() > G_SimSpeed)
 		{
-			if (NewSnake.S_State == NewSnake.Alive)
+			if (PlrSnake.S_State == PlrSnake.Alive)
 			{
 				//
 				// Code below for water dropping.
@@ -53,28 +54,48 @@ void Game::Run()
 					return;
 				}
 
-				NewSnake.MoveSnake(Keybinds); //Calling the move function in Snake.CPP
+				//Player Snake Controls & Move
+				if (sf::Keyboard::isKeyPressed(Keybinds[0]) && PlrSnake.S_Direction != Snake::Down) //Changing direction based on key press.
+					PlrSnake.S_Direction = Snake::Up;
+				else if (sf::Keyboard::isKeyPressed(Keybinds[1]) && PlrSnake.S_Direction != Snake::Up)
+					PlrSnake.S_Direction = Snake::Down;
+				else if (sf::Keyboard::isKeyPressed(Keybinds[2]) && PlrSnake.S_Direction != Snake::Right)
+					PlrSnake.S_Direction = Snake::Left;
+				else if (sf::Keyboard::isKeyPressed(Keybinds[3]) && PlrSnake.S_Direction != Snake::Left) 
+					PlrSnake.S_Direction = Snake::Right;
+				PlrSnake.MoveSnake(G_SeaLevel, AISnake); //Calling the move function in Snake.CPP
 
-				if (NewSnake.Segments.front().y < G_SeaLevel && NewSnake.Breath <= 100) NewSnake.Breath += 1;
-				else NewSnake.Breath -= 1;
-				if (NewSnake.Breath <= 0) NewSnake.S_State = NewSnake.Dead;
-				std::cout << "Breath: " << NewSnake.Breath << std::endl;
+				//AI Snake Direction & Movement
+
+				//Find Closest Collectable
+				Collectable& ClosestCollectable = Collectables[0];
+				for (int i = 0; i < Collectables.size(); i++)
+				{
+					int XDiff = AISnake.Segments.front().x + Collectables[i].Position.x;
+					int YDiff = AISnake.Segments.front().y + Collectables[i].Position.y;
+				}
+				AISnake.MoveSnake(G_SeaLevel, AISnake);
+
+				if (PlrSnake.Segments.front().y < G_SeaLevel && PlrSnake.Breath <= 100) PlrSnake.Breath += 1;
+				else PlrSnake.Breath -= 1;
+				if (PlrSnake.Breath <= 0) PlrSnake.S_State = PlrSnake.Dead;
+				std::cout << "Breath: " << PlrSnake.Breath << std::endl;
 
 				for (int i = 0; i < Collectables.size(); i++)
 				{
-					if (Collectables[i].Position == NewSnake.Segments.front())
+					if (Collectables[i].Position == PlrSnake.Segments.front())
 					{
-						NewSnake.Segments.PushBack(sf::Vector2f(-20, -20));
-						NewSnake.Breath += 10;
+						PlrSnake.Segments.PushBack(sf::Vector2f(-20, -20));
+						PlrSnake.Breath += 10;
 						Collectables.erase(Collectables.begin() + i);
 
 					}
 				}
-				for (int i = 0; i < NewSnake.Segments.Size(); i++)
+				for (int i = 0; i < PlrSnake.Segments.Size(); i++)
 				{
-					if (NewSnake.Segments.GetAt(i) != NewSnake.Segments.front())
+					if (PlrSnake.Segments.GetAt(i) != PlrSnake.Segments.front())
 					{
-						if (NewSnake.Segments.front().x == NewSnake.Segments.GetAt(i).x && NewSnake.Segments.front().y == NewSnake.Segments.GetAt(i).y)
+						if (PlrSnake.Segments.front().x == PlrSnake.Segments.GetAt(i).x && PlrSnake.Segments.front().y == PlrSnake.Segments.GetAt(i).y)
 							return;
 					}
 				}
@@ -102,7 +123,8 @@ void Game::Run()
 		for (Collectable i : Collectables)
 			i.SpawnCollectable(GraphicsWindow);
 
-		NewSnake.DrawSnake(GraphicsWindow); //Calling the draw function in Snake.CPP
+		PlrSnake.DrawSnake(GraphicsWindow); //Calling the draw function in Snake.CPP
+		AISnake.DrawSnake(GraphicsWindow);
 		GraphicsWindow.draw(Water);
 
 		//Draw the water

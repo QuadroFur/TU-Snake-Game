@@ -31,7 +31,7 @@ void Game::Run()
 
 		if (UpdateClock.getElapsedTime().asSeconds() > G_SimSpeed)
 		{
-			if (PlrSnake.S_State == PlrSnake.Alive && AISnake.S_State == AISnake.Alive)
+			if (PlrSnake.S_State == PlrSnake.Alive) //&& AISnake.S_State == AISnake.Alive)
 			{
 				//
 				// Code below for water dropping.
@@ -245,7 +245,7 @@ sf::Vector2f Game::FindFreePosition()
 {
 	sf::Vector2f Pos;
 	Pos.x = rand() % (760 / 20) * 20 + 20;
-	Pos.y = rand() % ((780 + G_SeaLevel) / 20) * 20;
+	Pos.y = rand() % 800 - ((G_SeaLevel / 20) * 20);
 
 	std::cout << Pos.y << std::endl;
 	std::cout << G_SeaLevel;

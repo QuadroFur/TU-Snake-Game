@@ -56,7 +56,10 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		std::cerr << "No movement set!";
 	}
 	if (Segments.front().y < SeaLevel - 20)
-		Segments.PopBack();
+		if (Segments.Size() != 1)
+			Segments.PopBack();
+		else
+			S_State = Dead;
 	Segments.PopBack();
 }
 

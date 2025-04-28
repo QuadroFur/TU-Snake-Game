@@ -31,7 +31,7 @@ void Game::Run()
 
 		if (UpdateClock.getElapsedTime().asSeconds() > G_SimSpeed)
 		{
-			if (PlrSnake.S_State == PlrSnake.Alive)
+			if (PlrSnake.S_State == PlrSnake.Alive && AISnake.S_State == AISnake.Alive)
 			{
 				//
 				// Code below for water dropping.
@@ -46,7 +46,6 @@ void Game::Run()
 				{
 					G_SeaLevel += 20;
 					G_Pass -= NumPasses; //This is to prevent the above inaccuracy causing error. To avoid innacuracy, SimSpeed must always be exactly divisible by TimeOfStep.
-					std::cout << "Sea level dropping..." << G_SeaLevel << std::endl;
 					Water.setPosition(sf::Vector2f(0, G_SeaLevel));
 				}
 				else if (G_SeaLevel >= 800)
@@ -133,12 +132,31 @@ void Game::Run()
 				}
 				else if (AISnake.Breath <= 35)
 				{
-					if (AISnake.S_Direction != AISnake.Down && AISnake.Segments.front().y < G_SeaLevel - 20)
+					std::cout << "Low breath!" << std::endl;
+					if (AISnake.S_Direction != AISnake.Down && AISnake.Segments.front().y > G_SeaLevel - 20)
+					{
+						std::cout << "Moving to air!" << std::endl;
 						AISnake.S_Direction = AISnake.Up;
+					}
+					else if (AISnake.Segments.front().y == G_SeaLevel - 20)
+					{
+						if (AISnake.Segments.front().x > 20 && AISnake.S_Direction != AISnake.Right)
+							AISnake.S_Direction = AISnake.Left;
+						else if (AISnake.Segments.front().x < 780 && AISnake.S_Direction != AISnake.Left)
+							AISnake.S_Direction = AISnake.Right;
+						else
+							AISnake.S_Direction = AISnake.Up;
+					}
 					else if (AISnake.S_Direction == AISnake.Down)
+					{
+						std::cout << "Moving left, facing down!" << std::endl;
 						AISnake.S_Direction = AISnake.Left;
+					}
 					else
+					{
+						std::cout << "Moving Down!" << std::endl;
 						AISnake.S_Direction = AISnake.Down;
+					}
 				}
 				AISnake.MoveSnake(G_SeaLevel, AISnake);
 
@@ -146,6 +164,9 @@ void Game::Run()
 				else PlrSnake.Breath -= 1;
 				if (AISnake.Segments.front().y < G_SeaLevel && AISnake.Breath < 100) AISnake.Breath += 1;
 				else AISnake.Breath -= 1;
+
+				std::cout << "PlrBreath: " << PlrSnake.Breath << std::endl;
+				std::cout << "AIBreath: " << AISnake.Breath << std::endl;
 
 				if (PlrSnake.Breath <= 0) PlrSnake.S_State = PlrSnake.Dead;
 				if (AISnake.Breath <= 0) AISnake.S_State = AISnake.Dead;
@@ -188,8 +209,20 @@ void Game::Run()
 			}
 			else
 			{
-				std::cout << "Watery grave..." << std::endl;
-				std::cout << "The snake couldn't 'sea' anymore..." << std::endl;
+				
+				if (PlrSnake.S_State == PlrSnake.Dead)
+				{
+					std::cout << "Watery grave..." << std::endl;
+					std::cout << "The snake couldn't 'sea' anymore..." << std::endl;
+					std::cout << "You lost with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
+				}
+				else
+				{
+					std::cout << "Watery grave..." << std::endl;
+					std::cout << "The snake couldn't 'sea' anymore..." << std::endl;
+					std::cout << "You won with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
+				}
+
 				return;
 			}
 		}

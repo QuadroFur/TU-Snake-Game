@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 
+//
+
 void Game::Run()
 {
 	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Snake Game!"); //Creating the snake game window.

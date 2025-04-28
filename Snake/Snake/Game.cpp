@@ -2,6 +2,7 @@
 #include "Snake.h"
 #include "Collectable.h"
 #include <iostream>
+#include <cstdlib>
 
 void Game::Run()
 {
@@ -68,18 +69,86 @@ void Game::Run()
 				//AI Snake Direction & Movement
 
 				//Find Closest Collectable
-				Collectable& ClosestCollectable = Collectables[0];
+				int ClosestCollectable = -1;
+				int ClosestPos = 800;
 				for (int i = 0; i < Collectables.size(); i++)
 				{
-					int XDiff = AISnake.Segments.front().x + Collectables[i].Position.x;
-					int YDiff = AISnake.Segments.front().y + Collectables[i].Position.y;
+					int XDiff = std::abs(AISnake.Segments.front().x - Collectables[i].Position.x);
+					int YDiff = std::abs(AISnake.Segments.front().y - Collectables[i].Position.y);
+
+					if (XDiff + YDiff < ClosestPos)
+					{
+						ClosestPos = XDiff + YDiff;
+						ClosestCollectable = i;
+					}
+				}
+
+				//Either move towards the collectable or surface.
+				if (ClosestCollectable != -1 && AISnake.Breath > G_SeaLevel / 20) //Check if the snake can grab the collectable and return in time.
+				{
+					std::cout << "Collectable found & Breath good" << std::endl;
+					std::cout << Collectables[ClosestCollectable].Position.x << " + " << Collectables[ClosestCollectable].Position.y << std::endl;
+					int XDir = AISnake.Segments.front().x - Collectables[ClosestCollectable].Position.x;
+					int YDir = AISnake.Segments.front().y - Collectables[ClosestCollectable].Position.y;
+
+					std::cout << XDir << " + " << YDir << std::endl;
+
+					if (XDir != 0)
+					{
+						std::cout << "Moving X" << std::endl;
+						if (XDir > 0 && AISnake.S_Direction != AISnake.Right)
+						{
+							AISnake.S_Direction = AISnake.Left;
+							std::cout << "Moving -X" << std::endl;
+						}
+						else if (XDir < 0 && AISnake.S_Direction != AISnake.Left)
+						{
+							AISnake.S_Direction = AISnake.Right;
+							std::cout << "Moving +X" << std::endl;
+						}
+						else
+						{
+							std::cout << "Moving Up" << std::endl;
+							AISnake.S_Direction = AISnake.Up;
+						}
+					}
+					else
+					{
+						std::cout << "Moving Y" << std::endl;
+						if (YDir > 0 && AISnake.S_Direction != AISnake.Down)
+						{
+							AISnake.S_Direction = AISnake.Up;
+							std::cout << "Moving -Y" << std::endl;
+						}
+						else if (YDir < 0 && AISnake.S_Direction != AISnake.Up)
+						{
+							AISnake.S_Direction = AISnake.Down;
+							std::cout << "Moving +Y" << std::endl;
+						}
+						else
+						{
+							AISnake.S_Direction = AISnake.Right;
+						}
+					}
+				}
+				else if (AISnake.Breath <= 35)
+				{
+					if (AISnake.S_Direction != AISnake.Down && AISnake.Segments.front().y < G_SeaLevel - 20)
+						AISnake.S_Direction = AISnake.Up;
+					else if (AISnake.S_Direction == AISnake.Down)
+						AISnake.S_Direction = AISnake.Left;
+					else
+						AISnake.S_Direction = AISnake.Down;
 				}
 				AISnake.MoveSnake(G_SeaLevel, AISnake);
 
-				if (PlrSnake.Segments.front().y < G_SeaLevel && PlrSnake.Breath <= 100) PlrSnake.Breath += 1;
+				if (PlrSnake.Segments.front().y < G_SeaLevel && PlrSnake.Breath < 100) PlrSnake.Breath += 1;
 				else PlrSnake.Breath -= 1;
+				if (AISnake.Segments.front().y < G_SeaLevel && AISnake.Breath < 100) AISnake.Breath += 1;
+				else AISnake.Breath -= 1;
+
 				if (PlrSnake.Breath <= 0) PlrSnake.S_State = PlrSnake.Dead;
-				std::cout << "Breath: " << PlrSnake.Breath << std::endl;
+				if (AISnake.Breath <= 0) AISnake.S_State = AISnake.Dead;
 
 				for (int i = 0; i < Collectables.size(); i++)
 				{
@@ -89,6 +158,12 @@ void Game::Run()
 						PlrSnake.Breath += 10;
 						Collectables.erase(Collectables.begin() + i);
 
+					}
+					if (Collectables[i].Position == AISnake.Segments.front()) //Vector overflow error - Exceeded number of items in the list?
+					{
+						AISnake.Segments.PushBack(sf::Vector2f(-40, -40));
+						AISnake.Breath += 10;
+						Collectables.erase(Collectables.begin() + i);
 					}
 				}
 				for (int i = 0; i < PlrSnake.Segments.Size(); i++)

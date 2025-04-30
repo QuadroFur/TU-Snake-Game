@@ -55,12 +55,31 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 	default:
 		std::cerr << "No movement set!";
 	}
+
+	Segments.PopBack();
+
+	//Move into the above direction switch and +-20 for visual improvements.
+	if (Segments.front().x == 20)
+		S_State = Dead;
+	else if (Segments.front().x == 780)
+		S_State = Dead;
+	else if (Segments.front().y == 20)
+		S_State = Dead;
+	else if (Segments.front().y == 780)
+		S_State = Dead;
+
 	if (Segments.front().y < SeaLevel - 20)
-		if (Segments.Size() != 1)
+	{
+		if (Segments.Size() >= 2)
+		{
+			std::cout << Segments.Size() << std::endl;
 			Segments.PopBack();
+			std::cout << "RemovedSegment" << std::endl;
+		}
 		else
 			S_State = Dead;
-	Segments.PopBack();
+	}
+	std::cout << "Step" << std::endl;
 }
 
 void Snake::DrawSnake(sf::RenderWindow& Window) //drawing the snake

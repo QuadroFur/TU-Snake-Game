@@ -23,7 +23,7 @@ private:
 	sf::Vector2f FindFreePosition();
 
 	std::vector<Collectable> Collectables;
-	const float G_SimSpeed = 0.1f; //0.13f
+	const float G_SimSpeed = 0.13f; //0.13f
 	
 	int G_Pass = 0;
 	int G_SeaLevel = 0;

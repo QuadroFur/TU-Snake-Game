@@ -6,11 +6,11 @@ class Collectable
 
 public:
 
-	enum Type {Food, Treasure};
-	int Weight = 1;
+	int Score = 0;
 
 	sf::Vector2f Position;
 
+	Collectable();
 	void SpawnCollectable(sf::RenderWindow& Window);
 
 };

@@ -4,20 +4,42 @@
 #include <iostream>
 #include <cstdlib>
 
-//
-
 void Game::Run()
 {
 	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Snake Game!"); //Creating the snake game window.
 	sf::RectangleShape Water;
+
+	//Walls
+	sf::RectangleShape WallLeft;
+	sf::RectangleShape WallRight;
+	sf::RectangleShape WallBottom;
+	sf::RectangleShape WallTop;
+
 	sf::Clock UpdateClock;
 
 	Snake PlrSnake;
 	Snake AISnake;
 
+	//Water Rendering
 	Water.setFillColor(sf::Color(0, 165, 255, 80));
 	Water.setPosition(sf::Vector2f(0, 0));
 	Water.setSize(sf::Vector2f(800, 800));
+
+	//Walls Rendering
+	WallLeft.setFillColor(sf::Color(255, 255, 255));
+	WallRight.setFillColor(sf::Color(255, 255, 255));
+	WallTop.setFillColor(sf::Color(255, 255, 255));
+	WallBottom.setFillColor(sf::Color(255, 255, 255));
+
+	WallLeft.setPosition(sf::Vector2f(0, 0));
+	WallRight.setPosition(sf::Vector2f(780, 0));
+	WallTop.setPosition(sf::Vector2f(0, 0));
+	WallBottom.setPosition(sf::Vector2f(0, 780));
+
+	WallLeft.setSize(sf::Vector2f(20, 800));
+	WallRight.setSize(sf::Vector2f(20, 800));
+	WallTop.setSize(sf::Vector2f(800, 20));
+	WallBottom.setSize(sf::Vector2f(800, 20));
 
 	srand(time(NULL));
 
@@ -53,7 +75,6 @@ void Game::Run()
 				else if (G_SeaLevel >= 800)
 				{
 					std::cout << "The drained sea..." << std::endl;
-					return;
 				}
 
 				//Player Snake Controls & Move
@@ -177,24 +198,24 @@ void Game::Run()
 				{
 					if (Collectables[i].Position == PlrSnake.Segments.front())
 					{
-						PlrSnake.Segments.PushBack(sf::Vector2f(-20, -20));
-						PlrSnake.Breath += 10;
+						for (int v = 0; v < Collectables[i].Score; v++)
+						{
+							PlrSnake.Segments.PushBack(sf::Vector2f(-20, -20));
+							PlrSnake.Breath += 10;
+						}
 						Collectables.erase(Collectables.begin() + i);
+						break;
 
 					}
-					if (Collectables[i].Position == AISnake.Segments.front()) //Vector overflow error - Exceeded number of items in the list?
+					if (Collectables[i].Position == AISnake.Segments.front())
 					{
-						AISnake.Segments.PushBack(sf::Vector2f(-40, -40));
-						AISnake.Breath += 10;
+						for (int v = 0; v < Collectables[i].Score; v++)
+						{
+							AISnake.Segments.PushBack(sf::Vector2f(-20, -20));
+							AISnake.Breath += 10;
+						}
 						Collectables.erase(Collectables.begin() + i);
-					}
-				}
-				for (int i = 0; i < PlrSnake.Segments.Size(); i++)
-				{
-					if (PlrSnake.Segments.GetAt(i) != PlrSnake.Segments.front())
-					{
-						if (PlrSnake.Segments.front().x == PlrSnake.Segments.GetAt(i).x && PlrSnake.Segments.front().y == PlrSnake.Segments.GetAt(i).y)
-							return;
+						break;
 					}
 				}
 				UpdateClock.restart();
@@ -237,6 +258,11 @@ void Game::Run()
 		AISnake.DrawSnake(GraphicsWindow);
 		GraphicsWindow.draw(Water);
 
+		GraphicsWindow.draw(WallLeft);
+		GraphicsWindow.draw(WallRight);
+		GraphicsWindow.draw(WallTop);
+		GraphicsWindow.draw(WallBottom);
+
 		//Draw the water
 
 		GraphicsWindow.display(); //Display output. Though this is self explanatory.
@@ -245,9 +271,12 @@ void Game::Run()
 }
 sf::Vector2f Game::FindFreePosition()
 {
+	std::cout << (G_SeaLevel - 800 / 20) * 20 << std::endl;
+
 	sf::Vector2f Pos;
 	Pos.x = rand() % (760 / 20) * 20 + 20;
-	Pos.y = rand() % 800 - ((G_SeaLevel / 20) * 20);
+	int Range = 800 - G_SeaLevel + 1;
+	Pos.y = rand() % ((Range + G_SeaLevel) / 20) * 20; // Divide by 0 error.
 
 	std::cout << Pos.y << std::endl;
 	std::cout << G_SeaLevel;

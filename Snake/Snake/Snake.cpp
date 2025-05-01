@@ -4,7 +4,6 @@
 
 Snake::Snake()
 {
-	Segments.PushBack(sf::Vector2f(100, 100));
 	S_State = Alive;
 }
 
@@ -16,9 +15,21 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x == Segments.GetAt(i).x && Segments.front().y - S_SegSize == Segments.GetAt(i).y)
+			{
 				S_State = Dead;
+				return;
+			}
 			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+			{
 				OtherSnake.S_State = Dead;
+				return;
+			}
+			else if (Segments.front().y == 20)
+			{
+				S_State = Dead;
+				std::cout << "Snake AOB" << std::endl;
+				return;
+			}
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x, Segments.front().y - S_SegSize));
 		break;
@@ -26,9 +37,21 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x - S_SegSize == Segments.GetAt(i).x && Segments.front().y == Segments.GetAt(i).y)
+			{
 				S_State = Dead;
+				return;
+			}
 			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+			{
 				OtherSnake.S_State = Dead;
+				return;
+			}
+			else if (Segments.front().x == 20)
+			{
+				S_State = Dead;
+				std::cout << "Snake AOB" << std::endl;
+				return;
+			}
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x - S_SegSize, Segments.front().y));
 		break;
@@ -36,9 +59,21 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x == Segments.GetAt(i).x && Segments.front().y + S_SegSize == Segments.GetAt(i).y)
+			{
 				S_State = Dead;
+				return;
+			}
 			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+			{
 				OtherSnake.S_State = Dead;
+				return;
+			}
+			else if (Segments.front().y == 780)
+			{
+				S_State = Dead;
+				std::cout << "Snake AOB" << std::endl;
+				return;
+			}
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x, Segments.front().y + S_SegSize));
 		break;
@@ -46,9 +81,21 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		for (int i = 0; i < Segments.Size(); i++) //Move to a function?
 		{
 			if (Segments.GetAt(i) != Segments.front() && Segments.front().x + S_SegSize == Segments.GetAt(i).x && Segments.front().y == Segments.GetAt(i).y)
+			{
 				S_State = Dead;
+				return;
+			}
 			else if (Segments.GetAt(i).x == OtherSnake.Segments.front().x && Segments.GetAt(i).y == OtherSnake.Segments.front().y)
+			{
 				OtherSnake.S_State = Dead;
+				return;
+			}
+			else if (Segments.front().x == 780)
+			{
+				S_State = Dead;
+				std::cout << "Snake AOB" << std::endl;
+				return;
+			}
 		}
 		Segments.PushFront(sf::Vector2f(Segments.front().x + S_SegSize, Segments.front().y));
 		break;
@@ -57,16 +104,6 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 	}
 
 	Segments.PopBack();
-
-	//Move into the above direction switch and +-20 for visual improvements.
-	if (Segments.front().x == 20)
-		S_State = Dead;
-	else if (Segments.front().x == 780)
-		S_State = Dead;
-	else if (Segments.front().y == 20)
-		S_State = Dead;
-	else if (Segments.front().y == 780)
-		S_State = Dead;
 
 	if (Segments.front().y < SeaLevel - 20)
 	{
@@ -89,7 +126,7 @@ void Snake::DrawSnake(sf::RenderWindow& Window) //drawing the snake
 	for (int i = 0; i < Segments.Size(); i++)
 	{
 		Body.setPosition(Segments.GetAt(i));
-		Body.setFillColor(sf::Color::Red);
+		Body.setFillColor(SnakeColor);
 		Window.draw(Body);
 	}
 }

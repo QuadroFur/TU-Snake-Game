@@ -18,7 +18,12 @@ void Game::Run()
 	sf::Clock UpdateClock;
 
 	Snake PlrSnake;
+	PlrSnake.SnakeColor = sf::Color::Green;
+	PlrSnake.Segments.PushBack(sf::Vector2f(100, 100));
 	Snake AISnake;
+	AISnake.SnakeColor = sf::Color::Red;
+	AISnake.Segments.PushBack(sf::Vector2f(700, 700));
+	AISnake.S_Direction = AISnake.Left;
 
 	//Water Rendering
 	Water.setFillColor(sf::Color(0, 165, 255, 80));
@@ -55,7 +60,7 @@ void Game::Run()
 
 		if (UpdateClock.getElapsedTime().asSeconds() > G_SimSpeed)
 		{
-			if (PlrSnake.S_State == PlrSnake.Alive) //&& AISnake.S_State == AISnake.Alive)
+			if (PlrSnake.S_State == PlrSnake.Alive && AISnake.S_State == AISnake.Alive) //&& AISnake.S_State == AISnake.Alive)
 			{
 				//
 				// Code below for water dropping.
@@ -108,6 +113,8 @@ void Game::Run()
 				//Either move towards the collectable or surface.
 				if (ClosestCollectable != -1 && AISnake.Breath > G_SeaLevel / 20) //Check if the snake can grab the collectable and return in time.
 				{
+
+					std::cout << AISnake.Breath << std::endl;
 					std::cout << "Collectable found & Breath good" << std::endl;
 					std::cout << Collectables[ClosestCollectable].Position.x << " + " << Collectables[ClosestCollectable].Position.y << std::endl;
 					int XDir = AISnake.Segments.front().x - Collectables[ClosestCollectable].Position.x;
@@ -181,7 +188,7 @@ void Game::Run()
 						AISnake.S_Direction = AISnake.Down;
 					}
 				}
-				AISnake.MoveSnake(G_SeaLevel, AISnake);
+				AISnake.MoveSnake(G_SeaLevel, PlrSnake);
 
 				if (PlrSnake.Segments.front().y < G_SeaLevel && PlrSnake.Breath < 100) PlrSnake.Breath += 1;
 				else PlrSnake.Breath -= 1;
@@ -201,7 +208,7 @@ void Game::Run()
 						for (int v = 0; v < Collectables[i].Score; v++)
 						{
 							PlrSnake.Segments.PushBack(sf::Vector2f(-20, -20));
-							PlrSnake.Breath += 10;
+							PlrSnake.Breath += 5;
 						}
 						Collectables.erase(Collectables.begin() + i);
 						break;
@@ -212,7 +219,7 @@ void Game::Run()
 						for (int v = 0; v < Collectables[i].Score; v++)
 						{
 							AISnake.Segments.PushBack(sf::Vector2f(-20, -20));
-							AISnake.Breath += 10;
+							AISnake.Breath += 5;
 						}
 						Collectables.erase(Collectables.begin() + i);
 						break;
@@ -233,19 +240,26 @@ void Game::Run()
 			else
 			{
 				
-				if (PlrSnake.S_State == PlrSnake.Dead)
+				if (PlrSnake.S_State == PlrSnake.Dead && AISnake.S_State == AISnake.Alive)
 				{
 					std::cout << "Watery grave..." << std::endl;
 					std::cout << "The snake couldn't 'sea' anymore..." << std::endl;
 					std::cout << "You lost with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
 				}
-				else
+				else if (AISnake.S_State == AISnake.Dead && PlrSnake.S_State == PlrSnake.Alive)
 				{
 					std::cout << "Watery grave..." << std::endl;
 					std::cout << "The snake couldn't 'sea' anymore..." << std::endl;
 					std::cout << "You won with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
 				}
-
+				else
+				{
+					std::cout << "Watery grave..." << std::endl;
+					if (PlrSnake.Segments.Size() > AISnake.Segments.Size())
+						std::cout << "You won with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
+					else
+						std::cout << "You lost with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
+				}
 				return;
 			}
 		}

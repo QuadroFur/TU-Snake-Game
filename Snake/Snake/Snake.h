@@ -18,6 +18,8 @@ public:
 	S_States S_State = Alive;
 	S_Directions S_Direction = Right;
 
+	sf::Color SnakeColor = sf::Color::Red;
+
 	void MoveSnake(int SeaLevel, Snake& OtherSnake);
 	void DrawSnake(sf::RenderWindow& Window);
 

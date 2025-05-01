@@ -4,9 +4,51 @@
 #include <iostream>
 #include <cstdlib>
 
+//Functions
+bool CheckNextSquare(Snake::S_Directions Direction, Snake& AISnake, Snake& OtherSnake)
+{
+	if (Direction == Snake::Left)
+	{
+		for (int i = 0; i < OtherSnake.Segments.Size(); i++)
+		{
+			if (AISnake.Segments.front().x - 20 == OtherSnake.Segments.GetAt(i).x)
+				return false; //Cell to the left is obstructed
+		}
+		return true; //Cell to the left is clear
+	}
+	else if (Direction == Snake::Right)
+	{
+		for (int i = 0; i < OtherSnake.Segments.Size(); i++)
+		{
+			if (AISnake.Segments.front().x + 20 == OtherSnake.Segments.GetAt(i).x)
+				return false; //Cell to the right is obstructed
+		}
+		return true; //Cell to the right is clear
+	}
+	else if (Direction == Snake::Up)
+	{
+		for (int i = 0; i < OtherSnake.Segments.Size(); i++)
+		{
+			if (AISnake.Segments.front().y - 20 == OtherSnake.Segments.GetAt(i).y)
+				return false; //Cell above is obstructed
+		}
+		return true; //Cell above is clear
+	}
+	else if (Direction == Snake::Down)
+	{
+		for (int i = 0; i < OtherSnake.Segments.Size(); i++)
+		{
+			if (AISnake.Segments.front().y + 20 == OtherSnake.Segments.GetAt(i).y)
+				return false; //Cell below is obstructed
+		}
+		return true; //Cell below is clear
+	}
+}
+
+//Run function
 void Game::Run()
 {
-	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 800, 800 }), "Snake Game!"); //Creating the snake game window.
+	sf::RenderWindow GraphicsWindow(sf::VideoMode({ 880, 800 }), "Snake Game!"); //Creating the snake game window.
 	sf::RectangleShape Water;
 
 	//Walls
@@ -16,6 +58,8 @@ void Game::Run()
 	sf::RectangleShape WallTop;
 
 	sf::Clock UpdateClock;
+
+	//sf::Text::
 
 	Snake PlrSnake;
 	PlrSnake.SnakeColor = sf::Color::Green;
@@ -89,7 +133,7 @@ void Game::Run()
 					PlrSnake.S_Direction = Snake::Down;
 				else if (sf::Keyboard::isKeyPressed(Keybinds[2]) && PlrSnake.S_Direction != Snake::Right)
 					PlrSnake.S_Direction = Snake::Left;
-				else if (sf::Keyboard::isKeyPressed(Keybinds[3]) && PlrSnake.S_Direction != Snake::Left) 
+				else if (sf::Keyboard::isKeyPressed(Keybinds[3]) && PlrSnake.S_Direction != Snake::Left)
 					PlrSnake.S_Direction = Snake::Right;
 				PlrSnake.MoveSnake(G_SeaLevel, AISnake); //Calling the move function in Snake.CPP
 
@@ -124,35 +168,28 @@ void Game::Run()
 
 					if (XDir != 0)
 					{
-						std::cout << "Moving X" << std::endl;
-						if (XDir > 0 && AISnake.S_Direction != AISnake.Right)
+						if (XDir > 0 && AISnake.S_Direction != AISnake.Right && CheckNextSquare(AISnake.Left, AISnake, PlrSnake))
 						{
 							AISnake.S_Direction = AISnake.Left;
-							std::cout << "Moving -X" << std::endl;
 						}
-						else if (XDir < 0 && AISnake.S_Direction != AISnake.Left)
+						else if (XDir < 0 && AISnake.S_Direction != AISnake.Left && CheckNextSquare(AISnake.Right, AISnake, PlrSnake))
 						{
 							AISnake.S_Direction = AISnake.Right;
-							std::cout << "Moving +X" << std::endl;
 						}
 						else
 						{
-							std::cout << "Moving Up" << std::endl;
 							AISnake.S_Direction = AISnake.Up;
 						}
 					}
 					else
 					{
-						std::cout << "Moving Y" << std::endl;
-						if (YDir > 0 && AISnake.S_Direction != AISnake.Down)
+						if (YDir > 0 && AISnake.S_Direction != AISnake.Down && CheckNextSquare(AISnake.Up, AISnake, PlrSnake))
 						{
 							AISnake.S_Direction = AISnake.Up;
-							std::cout << "Moving -Y" << std::endl;
 						}
-						else if (YDir < 0 && AISnake.S_Direction != AISnake.Up)
+						else if (YDir < 0 && AISnake.S_Direction != AISnake.Up && CheckNextSquare(AISnake.Down, AISnake, PlrSnake))
 						{
 							AISnake.S_Direction = AISnake.Down;
-							std::cout << "Moving +Y" << std::endl;
 						}
 						else
 						{
@@ -162,10 +199,8 @@ void Game::Run()
 				}
 				else if (AISnake.Breath <= 35)
 				{
-					std::cout << "Low breath!" << std::endl;
 					if (AISnake.S_Direction != AISnake.Down && AISnake.Segments.front().y > G_SeaLevel - 20)
 					{
-						std::cout << "Moving to air!" << std::endl;
 						AISnake.S_Direction = AISnake.Up;
 					}
 					else if (AISnake.Segments.front().y == G_SeaLevel - 20)
@@ -179,27 +214,14 @@ void Game::Run()
 					}
 					else if (AISnake.S_Direction == AISnake.Down)
 					{
-						std::cout << "Moving left, facing down!" << std::endl;
 						AISnake.S_Direction = AISnake.Left;
 					}
 					else
 					{
-						std::cout << "Moving Down!" << std::endl;
 						AISnake.S_Direction = AISnake.Down;
 					}
 				}
 				AISnake.MoveSnake(G_SeaLevel, PlrSnake);
-
-				if (PlrSnake.Segments.front().y < G_SeaLevel && PlrSnake.Breath < 100) PlrSnake.Breath += 1;
-				else PlrSnake.Breath -= 1;
-				if (AISnake.Segments.front().y < G_SeaLevel && AISnake.Breath < 100) AISnake.Breath += 1;
-				else AISnake.Breath -= 1;
-
-				std::cout << "PlrBreath: " << PlrSnake.Breath << std::endl;
-				std::cout << "AIBreath: " << AISnake.Breath << std::endl;
-
-				if (PlrSnake.Breath <= 0) PlrSnake.S_State = PlrSnake.Dead;
-				if (AISnake.Breath <= 0) AISnake.S_State = AISnake.Dead;
 
 				for (int i = 0; i < Collectables.size(); i++)
 				{
@@ -208,7 +230,7 @@ void Game::Run()
 						for (int v = 0; v < Collectables[i].Score; v++)
 						{
 							PlrSnake.Segments.PushBack(sf::Vector2f(-20, -20));
-							PlrSnake.Breath += 5;
+							PlrSnake.Breath += 10;
 						}
 						Collectables.erase(Collectables.begin() + i);
 						break;
@@ -219,7 +241,7 @@ void Game::Run()
 						for (int v = 0; v < Collectables[i].Score; v++)
 						{
 							AISnake.Segments.PushBack(sf::Vector2f(-20, -20));
-							AISnake.Breath += 5;
+							AISnake.Breath += 10;
 						}
 						Collectables.erase(Collectables.begin() + i);
 						break;
@@ -239,7 +261,7 @@ void Game::Run()
 			}
 			else
 			{
-				
+
 				if (PlrSnake.S_State == PlrSnake.Dead && AISnake.S_State == AISnake.Alive)
 				{
 					std::cout << "Watery grave..." << std::endl;
@@ -260,6 +282,8 @@ void Game::Run()
 					else
 						std::cout << "You lost with: " << PlrSnake.Segments.Size() << " points!" << std::endl;
 				}
+				int p;
+				std::cin >> p;
 				return;
 			}
 		}
@@ -289,8 +313,8 @@ sf::Vector2f Game::FindFreePosition()
 
 	sf::Vector2f Pos;
 	Pos.x = rand() % (760 / 20) * 20 + 20;
-	int Range = 800 - G_SeaLevel + 1;
-	Pos.y = rand() % ((Range + G_SeaLevel) / 20) * 20; // Divide by 0 error.
+	int Range = (800 - G_SeaLevel) / 20;
+	Pos.y = (rand() % Range * 20) + G_SeaLevel;
 
 	std::cout << Pos.y << std::endl;
 	std::cout << G_SeaLevel;

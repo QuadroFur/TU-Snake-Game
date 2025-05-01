@@ -103,6 +103,19 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		std::cerr << "No movement set!";
 	}
 
+	if (Segments.front().y < SeaLevel && Breath < 100) Breath += 1;
+	else Breath -= 1;
+
+	if (Breath <= 0)
+		if (Segments.Size() >= 2)
+			Segments.PopBack();
+		else
+		{
+			S_State = Dead;
+			return;
+		}
+
+
 	Segments.PopBack();
 
 	if (Segments.front().y < SeaLevel - 20)

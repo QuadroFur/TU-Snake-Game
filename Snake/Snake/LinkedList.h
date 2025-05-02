@@ -108,4 +108,13 @@ public:
 		if (Node == nullptr) return T();
 		return Node->Data;
 	}
+	void PopFront()
+	{
+		ListNode<T>* Node = Head;
+		if (Node != nullptr && Node->Next != nullptr)
+			Head = Node->Next;
+		else
+			Head = nullptr;
+		Node = nullptr;
+	}
 };

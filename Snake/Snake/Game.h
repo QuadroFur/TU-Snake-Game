@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "Collectable.h"
 #include <vector>
+#include "LinkedList.h"
 
 class Game
 {
@@ -27,5 +28,9 @@ private:
 	
 	int G_Pass = 0;
 	int G_SeaLevel = 0;
+	int G_PreviousBreath = 0;
+
+	LinkedList <sf::Vector2f> G_BreathChart;
+	LinkedList <sf::Vector2f> G_ScoreChart;
 
 };

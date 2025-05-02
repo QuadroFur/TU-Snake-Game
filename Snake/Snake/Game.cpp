@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Snake.h"
-#include "Collectable.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -287,10 +286,77 @@ void Game::Run()
 				return;
 			}
 		}
+
+		//Score counter
+		if (PlrSnake.Segments.Size() > G_ScoreChart.Size())
+			for (int i = 0; PlrSnake.Segments.Size() > G_ScoreChart.Size(); i++)
+			{
+				if (G_ScoreChart.Size() > 0)
+					G_ScoreChart.PushFront(sf::Vector2f(G_ScoreChart.front().x, G_ScoreChart.front().y + 20));
+				else
+					G_ScoreChart.PushFront(sf::Vector2f(820, 0));
+			}
+		else if (PlrSnake.Segments.Size() < G_ScoreChart.Size())
+			for (int i = 0; PlrSnake.Segments.Size() < G_ScoreChart.Size(); i++)
+			{
+				G_ScoreChart.PopFront();
+			}
+
+		//Breath Counter
+
+/*		if (PlrSnake.Breath % 5 == 0)
+			if (G_PreviousBreath > PlrSnake.Breath)
+				for (int i = 0; PlrSnake.Breath / 5 > G_BreathChart.Size(); i++)
+				{
+					if (G_BreathChart.Size() > 0)
+						G_BreathChart.PushFront(sf::Vector2f(G_BreathChart.front().x, G_BreathChart.front().y + 20));
+					else
+						G_BreathChart.PushFront(sf::Vector2f(840, 0));
+				}
+			else if (G_PreviousBreath < PlrSnake.Breath)
+				for (int i = 0; PlrSnake.Breath / 5 < G_BreathChart.Size(); i++)
+				{
+					G_BreathChart.PopFront();
+				}
+
+		G_PreviousBreath = PlrSnake.Breath;
+*/
+		if (PlrSnake.Breath > G_BreathChart.Size())
+			for (int i = 0; PlrSnake.Breath > G_BreathChart.Size(); i++)
+			{
+				if (G_BreathChart.Size() > 0)
+					G_BreathChart.PushFront(sf::Vector2f(G_BreathChart.front().x, G_BreathChart.front().y + 20));
+				else
+					G_BreathChart.PushFront(sf::Vector2f(840, 0));
+			}
+		else if (PlrSnake.Breath < G_BreathChart.Size())
+			for (int i = 0; PlrSnake.Breath < G_BreathChart.Size(); i++)
+			{
+				G_BreathChart.PopFront();
+			}
+
 		GraphicsWindow.clear(); //Clearing the graphics window before rendering more.
 
 		for (Collectable i : Collectables)
 			i.SpawnCollectable(GraphicsWindow);
+
+		//Draw the Score Counter
+		sf::RectangleShape ScoreSegment(sf::Vector2f(20, 20));
+		for (int i = 0; i < G_ScoreChart.Size(); i++)
+		{
+			ScoreSegment.setPosition(G_ScoreChart.GetAt(i));
+			ScoreSegment.setFillColor(PlrSnake.SnakeColor);
+			GraphicsWindow.draw(ScoreSegment);
+		}
+
+		//Draw the Breath Counter
+		sf::RectangleShape BreathSegment(sf::Vector2f(20, 20));
+		for (int i = 0; i < G_BreathChart.Size(); i++)
+		{
+			BreathSegment.setPosition(G_BreathChart.GetAt(i));
+			BreathSegment.setFillColor(sf::Color::Cyan);
+			GraphicsWindow.draw(BreathSegment);
+		}
 
 		PlrSnake.DrawSnake(GraphicsWindow); //Calling the draw function in Snake.CPP
 		AISnake.DrawSnake(GraphicsWindow);

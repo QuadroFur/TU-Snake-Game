@@ -90,7 +90,7 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 				OtherSnake.S_State = Dead;
 				return;
 			}
-			else if (Segments.front().x == 780)
+			else if (Segments.front().x == 760)
 			{
 				S_State = Dead;
 				std::cout << "Snake AOB" << std::endl;
@@ -103,7 +103,7 @@ void Snake::MoveSnake(int SeaLevel, Snake& OtherSnake)
 		std::cerr << "No movement set!";
 	}
 
-	if (Segments.front().y < SeaLevel && Breath < 100) Breath += 1;
+	if (Segments.front().y < SeaLevel && Breath < 100) Breath += 5;
 	else Breath -= 1;
 
 	if (Breath <= 0)
